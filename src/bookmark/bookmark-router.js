@@ -46,7 +46,7 @@ bookmarkRouter
         .then(bookmark => {
           res
           .status(201)
-          .location(`/bookmarks/${bookmark.id}`)
+          .location(`/api/bookmarks/${bookmark.id}`)
           .json(bookmark);
         })
         .catch(next)
@@ -96,13 +96,38 @@ bookmarkRouter
 // DELETE /bookmarks/:id that deletes the bookmark with the given ID.
   .delete((req, res, next) => {
 
-    BookmarkService.deleteArticle(
+    BookmarkService.deleteBookmark(
       req.app.get('db'),
       req.params.id
     )
       .then(() => {
         logger.info(`Bookmark with id ${req.params.id} deleted`)
 
+        res.status(204).end()
+      })
+      .catch(next)
+  })
+
+  .patch(parser, (req, res, next) => {
+    const {title, url, description, rating} = req.body
+    const bookmarkToUpdate = {title, url, description, rating} 
+  
+    const numberOfValues = Object.values(bookmarkToUpdate).filter(Boolean).length
+
+    if (numberOfValues === 0) {
+      return res.status(400).json({
+        error: {
+          message: 'Must contain either title, url, description, or rating'
+        }
+      })
+    }
+
+    BookmarkService.updateBookmark(
+      req.app.get('db'),
+      req.params.id,
+      bookmarkToUpdate
+    )
+      .then(rows => {
         res.status(204).end()
       })
       .catch(next)

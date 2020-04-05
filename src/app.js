@@ -32,7 +32,7 @@ app.use(cors())
 //   next()
 // })
 
-app.use('/bookmarks',bookmarkRouter)
+app.use('/api/bookmarks', bookmarkRouter)
 //add app.use for Routers UNDER validation function and ABOVE error function
 
 app.use((error, req, res, next) => {

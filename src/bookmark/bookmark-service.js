@@ -18,12 +18,12 @@ const BookmarkService = {
       .where('id', id)
       .first()
   },
-  deleteArticle(knex, id) {
+  deleteBookmark(knex, id) {
     return knex('bookmarks')
       .where({id})
       .delete()
   },
-  updateArticle(knex, id, newBookmarkFields) {
+  updateBookmark(knex, id, newBookmarkFields) {
     return knex('bookmarks')
       .where({id})
       .update(newBookmarkFields)
